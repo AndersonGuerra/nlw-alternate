@@ -6,3 +6,4 @@ O mesmo produto criado na nlw1 da rocketseat, mas feito algumas tecnologias dife
 
 - Backend: foram utilizadas as mesmas bibliotecas da semana nlw, não existe diferença aqui
 - Web: toda a parte web foi criada utilizando o vuejs, um framework que permite criar aplicações web, possui uma comunidade bem ativa e tem uma baixa curva de aprendizagem.
+- Mobile: a versão móvel foi feita com flutter, um framework de código aberto para desenvolvimento nativo e multiplataforma criado pelo google.
