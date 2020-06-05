@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:mobile/models/ItemModel.dart';
 
 String baseUrl = "http://192.168.100.146:3333";
 
@@ -7,8 +8,10 @@ Future getItems() async {
   return response;
 }
 
-Future getPoints(String city, String uf) async {
-  var response = await http.get("$baseUrl/points?city=$city&uf=$uf&items=4");
+Future getPoints(String city, String uf, List<ItemModel> items) async {
+  String strItems = items.map((e) => e.id).join(", ").toString();
+  var response =
+      await http.get("$baseUrl/points?city=$city&uf=$uf&items=$strItems");
   return response;
 }
 
@@ -24,7 +27,7 @@ Future getUfs() async {
 }
 
 Future getCities(String uf) async {
-  var response = await http
-      .get("https://servicodados.ibge.gov.br/api/v1/localidades/estados/$uf/municipios");
+  var response = await http.get(
+      "https://servicodados.ibge.gov.br/api/v1/localidades/estados/$uf/municipios");
   return response;
 }

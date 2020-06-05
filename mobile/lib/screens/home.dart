@@ -28,51 +28,35 @@ class _HomeState extends State<Home> {
     });
   }
 
-  loadCities() async {
+  Future<List<String>> loadCities() async {
+    List<String> citiesAux = [];
     var response = await getCities(selectedUf);
-    cities = [];
     var responseJson = jsonDecode(response.body);
     responseJson.forEach((item) {
-      cities.add(item['nome']);
+      citiesAux.add(item['nome']);
     });
+    return citiesAux;
   }
 
-  showPickerModal(BuildContext context) async {
+  showPickerModal(BuildContext context, bool isSelectingUf) async {
     new Picker(
-        adapter: PickerDataAdapter<String>(pickerdata: ufs),
+        adapter:
+            PickerDataAdapter<String>(pickerdata: isSelectingUf ? ufs : cities),
         changeToFirst: true,
-        hideHeader: false,
+        hideHeader: true,
         cancelText: "Cancelar",
         confirmText: "Confirmar",
         onConfirm: (Picker picker, List value) async {
-          // print(value.toString());
-          // print(picker.adapter.text);
           var aux =
               picker.adapter.text.substring(1, picker.adapter.text.length - 1);
-          await loadCities();
-          setState(() {
+          if (isSelectingUf) {
             selectedUf = aux;
-          });
-        }).showModal(this.context); //_scaffoldKey.currentState);
-  }
-
-  showCitiesPickerModal(BuildContext context) async {
-    new Picker(
-        adapter: PickerDataAdapter<String>(pickerdata: cities),
-        changeToFirst: true,
-        hideHeader: false,
-        cancelText: "Cancelar",
-        confirmText: "Confirmar",
-        onConfirm: (Picker picker, List value) async {
-          // print(value.toString());
-          // print(picker.adapter.text);
-          var aux =
-              picker.adapter.text.substring(1, picker.adapter.text.length - 1);
-          print(aux);
-          setState(() {
+            cities = await loadCities();
+          } else {
             selectedCity = aux;
-          });
-        }).showModal(this.context); //_scaffoldKey.currentState);
+          }
+          setState(() {});
+        }).showDialog(this.context); //_scaffoldKey.currentState);
   }
 
   @override
@@ -138,7 +122,7 @@ class _HomeState extends State<Home> {
                 ),
                 onTap: () {
                   if (ufs.length > 0) {
-                    showPickerModal(context);
+                    showPickerModal(context, true);
                   }
                 },
               ),
@@ -157,7 +141,7 @@ class _HomeState extends State<Home> {
                 ),
                 onTap: () {
                   if (selectedUf != null) {
-                    showCitiesPickerModal(context);
+                    showPickerModal(context, false);
                   }
                 },
               ),
